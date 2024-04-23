@@ -30,6 +30,7 @@ func newTask(c *fiber.Ctx) error {
     if err := input.Validate(); err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Validation failed",
+            Error:   &err,
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -38,6 +39,7 @@ func newTask(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error creating task",
+            Error:   &err,
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -61,6 +63,7 @@ func getTaskById(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusNotFound).JSON(utils.Response{
             Message: "Task not found",
+            Error:   &err,
             Status:  fiber.StatusNotFound,
         })
     }
@@ -77,6 +80,7 @@ func getAllTasks(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusNotFound).JSON(utils.Response{
             Message: "Tasks not found",
+            Error:   &err,
             Status:  fiber.StatusNotFound,
         })
     }
@@ -104,6 +108,7 @@ func updateTaskById(c *fiber.Ctx) error {
     if editErr != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error updating task",
+            Error:   &editErr,
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -127,6 +132,7 @@ func deleteTaskById(c *fiber.Ctx) error {
     if deleteErr != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error deleting task",
+            Error:   &deleteErr,
             Status:  fiber.StatusBadRequest,
         })
     }

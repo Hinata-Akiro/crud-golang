@@ -20,7 +20,7 @@ func createNewTask(input *Task) (*Task, error) {
 		Assignee:    input.Assignee,
 	}
 
-	if err := database.Db.Create(&task).Error; err != nil {
+	if err := database.Database.Create(&task).Error; err != nil {
 		return nil ,err
 	}
 	return task, nil
@@ -29,7 +29,7 @@ func createNewTask(input *Task) (*Task, error) {
 func allTasks() ([]Task, error) {
 	var tasks []Task
 
-    if err := database.Db.Find(&tasks).Error; err != nil {
+    if err := database.Database.Find(&tasks).Error; err != nil {
         return nil ,err
     }
     return tasks, nil
@@ -37,7 +37,7 @@ func allTasks() ([]Task, error) {
 
 func getSingleTask(taskId uint64) (*Task, error) {
 	var task Task
-    if err := database.Db.Where("id = ?", taskId).First(&task).Error; err != nil {
+    if err := database.Database.Where("id = ?", taskId).First(&task).Error; err != nil {
         return nil ,err
     }
     return &task, nil
@@ -45,7 +45,7 @@ func getSingleTask(taskId uint64) (*Task, error) {
 
 func editTaskById(taskId uint64, input *Task) (*Task, error) {
     var existingTask Task
-    if err := database.Db.Where("id = ?", taskId).First(&existingTask).Error; err != nil {
+    if err := database.Database.Where("id = ?", taskId).First(&existingTask).Error; err != nil {
         return nil, err
     }
 
@@ -70,7 +70,7 @@ func editTaskById(taskId uint64, input *Task) (*Task, error) {
         }
     }
 
-    if err := database.Db.Save(&existingTask).Error; err != nil {
+    if err := database.Database.Save(&existingTask).Error; err != nil {
         return nil, err
     }
 
@@ -79,11 +79,11 @@ func editTaskById(taskId uint64, input *Task) (*Task, error) {
 
 func deleteTask(taskId uint64) error {
 	var task Task
-    if err := database.Db.Where("id = ?", taskId).First(&task).Error; err != nil {
+    if err := database.Database.Where("id = ?", taskId).First(&task).Error; err != nil {
         return err
     }
 
-    if err := database.Db.Delete(&task).Error; err != nil {
+    if err := database.Database.Delete(&task).Error; err != nil {
         return err
     }
     return nil

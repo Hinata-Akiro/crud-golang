@@ -1,24 +1,25 @@
 package database
 
 import (
+	"crud-app/config"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"crud-app/config"
 )
 
 var (
-	Db *gorm.DB
+	Database *gorm.DB
 )
 
-func Connect() (*gorm.DB, error) {
-	config, err := config.Config()
-	// dsn := "host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai"
-	dsn := "host=" + config.DB_HOST + " user=" + config.DB_USER + " password=" + config.DB_PASSWORD + " dbname=" + config.DB_NAME + " port=" + config.DB_PORT + " sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func Connect() error {
+	config := config.Config()
+	dsn := "host=" + config.DB_HOST + " user=" + config.DB_USER + " password=" + config.DB_PASSWORD + " dbname=" + config.DB_NAME + " port=" + config.DB_PORT + " sslmode=disable TimeZone=Africa/Lagos"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		PrepareStmt: true,
+	})
+	Database = db
 	if err != nil {
-		return nil, err
+		panic("failed to connect database, error: " + err.Error())
 	}
-	return db, nil
+	return nil
 }
-
-

@@ -16,12 +16,11 @@ type AppConfig struct {
 	DB_PASSWORD string
 }
 
-// Config function
-func Config() (*AppConfig, error)  {
+func Config() *AppConfig {
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
-		return nil, err
+		panic("Error loading .env file")
 	}
 	appConfig := &AppConfig{
 		DB_HOST:     os.Getenv("DB_HOST"),
@@ -32,5 +31,5 @@ func Config() (*AppConfig, error)  {
 	}
 	log.Println("DB_HOST: ", appConfig.DB_HOST)
 
-	return appConfig, nil
+	return appConfig
 }
