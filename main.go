@@ -23,25 +23,7 @@ func main() {
 		return c.SendString("Welcome to crud application")
 	})
 
-	app.Post("/tasks", func(c *fiber.Ctx) error {
-		return tasks.NewTask(c,db)
-	})
-
-	app.Get("/tasks", func(c *fiber.Ctx) error {
-		return tasks.GetAllTasks(c,db)
-	})
-
-	app.Get("/tasks/:taskId", func(c *fiber.Ctx) error {
-        return tasks.GetTaskById(c, db)
-    })
-
-	app.Put("/tasks/:taskId", func(c *fiber.Ctx) error {
-        return tasks.UpdateTaskById(c, db)
-    })
-
-	app.Delete("/tasks/:taskId", func(c *fiber.Ctx) error {
-		return tasks.DeleteTaskById(c, db)
-	})
+	tasks.TaskController(app)
 
 	err = app.Listen(":3000")
 	if err != nil {

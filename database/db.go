@@ -1,14 +1,13 @@
 package database
 
 import (
-	"database/sql"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"crud-app/config"
 )
 
 var (
-	Db *sql.DB 
+	Db *gorm.DB
 )
 
 func Connect() (*gorm.DB, error) {
