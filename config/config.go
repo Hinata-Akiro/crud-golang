@@ -14,6 +14,7 @@ type AppConfig struct {
 	DB_NAME     string
 	DB_USER     string
 	DB_PASSWORD string
+	JWT_SECRET  string 
 }
 
 func Config() *AppConfig {
@@ -28,6 +29,7 @@ func Config() *AppConfig {
 		DB_NAME:     os.Getenv("DB_NAME"),
 		DB_USER:     os.Getenv("DB_USER"),
 		DB_PASSWORD: os.Getenv("DB_PASSWORD"),
+		JWT_SECRET:  os.Getenv("JWT_SECRET"),
 	}
 	log.Println("DB_HOST: ", appConfig.DB_HOST)
 

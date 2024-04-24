@@ -12,7 +12,7 @@ import (
 
 
 func TaskController (app * fiber.App) {
-	taskRoute := app.Group("/tasks")
+	taskRoute := app.Group("/api/v1/tasks")
     taskRoute.Post("/", newTask)
 	taskRoute.Get("/", getAllTasks)
 	taskRoute.Get("/:taskId",  getTaskById)
@@ -30,7 +30,7 @@ func newTask(c *fiber.Ctx) error {
     if err := input.Validate(); err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Validation failed",
-            Error:   &err,
+            Error:   err.Error(),
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -39,7 +39,7 @@ func newTask(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error creating task",
-            Error:   &err,
+            Error:   err.Error(),
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -63,7 +63,7 @@ func getTaskById(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusNotFound).JSON(utils.Response{
             Message: "Task not found",
-            Error:   &err,
+            Error:   err.Error(),
             Status:  fiber.StatusNotFound,
         })
     }
@@ -80,7 +80,7 @@ func getAllTasks(c *fiber.Ctx) error {
     if err != nil {
         return c.Status(fiber.StatusNotFound).JSON(utils.Response{
             Message: "Tasks not found",
-            Error:   &err,
+            Error:   err.Error(),
             Status:  fiber.StatusNotFound,
         })
     }
@@ -108,7 +108,7 @@ func updateTaskById(c *fiber.Ctx) error {
     if editErr != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error updating task",
-            Error:   &editErr,
+            Error:   editErr.Error(),
             Status:  fiber.StatusBadRequest,
         })
     }
@@ -132,7 +132,7 @@ func deleteTaskById(c *fiber.Ctx) error {
     if deleteErr != nil {
         return c.Status(fiber.StatusBadRequest).JSON(utils.Response{
             Message: "Error deleting task",
-            Error:   &deleteErr,
+            Error:   deleteErr.Error(),
             Status:  fiber.StatusBadRequest,
         })
     }

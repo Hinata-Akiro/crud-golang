@@ -16,6 +16,18 @@ type User struct {
     UpdatedAt  time.Time `db:"updated_at" json:"updated_at"`
 }
 
+type LoginInput struct {
+    Email string
+    Password string
+}
+
+func (u *LoginInput) Validate () error {
+    validate := validator.New()
+    return validate.Struct(u)
+}
+
+
+
 func (u *User) Validate () error {
 	validate := validator.New()
 	return validate.Struct(u)

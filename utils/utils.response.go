@@ -8,6 +8,6 @@ import (
 type Response struct {
 	Message string `json:"message"`
 	Data    *fiber.Map `json:"data"`
-	Error   *error        `json:"error"`
+	Error   string      `json:"error"`
 	Status  int `json:"status"`
 }
