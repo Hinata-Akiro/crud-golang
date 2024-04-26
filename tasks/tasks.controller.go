@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"crud-app/utils"
+    "crud-app/middleware"
 )
 
 
@@ -13,6 +14,9 @@ import (
 
 func TaskController (app * fiber.App) {
 	taskRoute := app.Group("/api/v1/tasks")
+
+    taskRoute.Use(middleware.AuthMiddleware())
+    
     taskRoute.Post("/", newTask)
 	taskRoute.Get("/", getAllTasks)
 	taskRoute.Get("/:taskId",  getTaskById)

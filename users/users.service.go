@@ -62,3 +62,13 @@ func loginUser(email string, password string) (string, error) {
     return token, nil
 }
 
+func FindUserByEmail(email string) (*User, error) {
+	var user User
+    if err := database.Database.Where("email =?", email).First(&user).Error; err != nil {
+        if errors.Is(err, gorm.ErrRecordNotFound) {
+            return nil, errors.New("user not found")
+        }
+        return nil, err
+    }
+    return &user, nil
+}
