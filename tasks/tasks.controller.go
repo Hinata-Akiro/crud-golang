@@ -104,6 +104,8 @@ func updateTaskById(c *fiber.Ctx) error {
     var input Task
     taskIdStr := c.Params("taskId")
 
+    user := c.Locals("user").(*users.User)
+
     taskId, err := strconv.ParseUint(taskIdStr, 10, 64)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).SendString("Invalid task ID")
@@ -111,6 +113,22 @@ func updateTaskById(c *fiber.Ctx) error {
 
     if err := c.BodyParser(&input); err != nil {
         return c.Status(fiber.StatusBadRequest).SendString(err.Error())
+    }
+
+    existingTask, err := getSingleTask(taskId)
+    if err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(utils.Response{
+            Message: "Task not found",
+            Error:   err.Error(),
+            Status:  fiber.StatusNotFound,
+        })
+    }
+    if existingTask.AuthorID != user.ID {
+        return c.Status(fiber.StatusForbidden).JSON(utils.Response{
+            Message: "You are not authorized to update this task",
+            Error:   "Forbidden",
+            Status:  fiber.StatusForbidden,
+        })
     }
 
     existingTask, editErr := editTaskById(taskId, &input)
@@ -131,10 +149,28 @@ func updateTaskById(c *fiber.Ctx) error {
 
 func deleteTaskById(c *fiber.Ctx) error {
     taskIdStr := c.Params("taskId")
+    user := c.Locals("user").(*users.User)
+
 
     taskId, err := strconv.ParseUint(taskIdStr, 10, 64)
     if err != nil {
         return c.Status(fiber.StatusBadRequest).SendString("Invalid task ID")
+    }
+
+    existingTask, err := getSingleTask(taskId)
+    if err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(utils.Response{
+            Message: "Task not found",
+            Error:   err.Error(),
+            Status:  fiber.StatusNotFound,
+        })
+    }
+    if existingTask.AuthorID != user.ID {
+        return c.Status(fiber.StatusForbidden).JSON(utils.Response{
+            Message: "You are not authorized to update this task",
+            Error:   "Forbidden",
+            Status:  fiber.StatusForbidden,
+        })
     }
 
     deleteErr := deleteTask(taskId)
