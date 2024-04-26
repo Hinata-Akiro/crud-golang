@@ -6,6 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"crud-app/utils"
     "crud-app/middleware"
+    "crud-app/users"
 )
 
 
@@ -16,7 +17,7 @@ func TaskController (app * fiber.App) {
 	taskRoute := app.Group("/api/v1/tasks")
 
     taskRoute.Use(middleware.AuthMiddleware())
-    
+
     taskRoute.Post("/", newTask)
 	taskRoute.Get("/", getAllTasks)
 	taskRoute.Get("/:taskId",  getTaskById)
@@ -38,6 +39,10 @@ func newTask(c *fiber.Ctx) error {
             Status:  fiber.StatusBadRequest,
         })
     }
+
+    user := c.Locals("user").(*users.User)
+
+    input.AuthorID = user.ID
 
     task, err := createNewTask(&input)
     if err != nil {

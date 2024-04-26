@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"gorm.io/gorm"
+	"github.com/google/uuid"
 )
 
 func checkUserExists(email string) bool {
@@ -20,6 +21,11 @@ func checkUserExists(email string) bool {
 
 func createNewUser(userInput *User) (*User, error) {
 
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return nil, err
+	}
+
 	userExist := checkUserExists(userInput.Email)
 	if userExist {
 		return nil, errors.New("user already exists")
@@ -32,6 +38,7 @@ func createNewUser(userInput *User) (*User, error) {
 	}
 
 	userInput.PassWord = hashedPassword
+	userInput.ID = id
 
 	if err := database.Database.Create(&userInput).Error; err != nil {
 		return nil, err
